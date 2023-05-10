@@ -16,7 +16,7 @@ class TodoViewModel @Inject constructor() : ViewModel() {
     init {
         _viewState.update {
             it.copy(
-                tasks = listOf(
+                tasks = mutableListOf(
                     TaskItem("title1", "desc1"),
                     TaskItem("title2", "desc2"),
                     TaskItem("title3", "desc3"),
@@ -28,7 +28,15 @@ class TodoViewModel @Inject constructor() : ViewModel() {
                 )
             )
         }
+    }
 
-
+    fun addTask() {
+        _viewState.update {
+            it.copy(
+                tasks = it.tasks.toMutableList().apply {
+                    add(TaskItem("title", "desc"))
+                }
+            )
+        }
     }
 }

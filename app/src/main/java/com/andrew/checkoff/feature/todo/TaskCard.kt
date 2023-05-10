@@ -3,8 +3,10 @@ package com.andrew.checkoff.feature.todo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -32,11 +34,11 @@ internal fun TaskCard(
     title: String,
     desc: String,
 ) {
-    val checkedState = remember { mutableStateOf(true) }
+    val checkedState = remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(5.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -44,7 +46,7 @@ internal fun TaskCard(
             verticalAlignment = Alignment.Top,
             modifier = Modifier
                 .padding(bottom = 10.dp, end = 10.dp)
-                .background(color = Color.White),
+                .background(color = MaterialTheme.colorScheme.primaryContainer),
         ) {
             CircleCheckbox(
                 selected = checkedState.value,
@@ -53,7 +55,7 @@ internal fun TaskCard(
             Column(
                 modifier = Modifier.padding(start = 0.dp, top = 15.dp)
             ) {
-                Text(text = title, style = MaterialTheme.typography.titleMedium, maxLines = 3)
+                Text(text = title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
                 Text(text = desc, style = MaterialTheme.typography.bodySmall, maxLines = 1)
             }
         }
@@ -64,20 +66,24 @@ internal fun TaskCard(
 fun CircleCheckbox(selected: Boolean, enabled: Boolean = true, onChecked: () -> Unit) {
     IconButton(
         onClick = { onChecked() },
-        enabled = enabled
+        enabled = enabled,
     ) {
         if (selected) {
             Icon(
                 imageVector = Icons.Filled.CheckCircle,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.background(Color.White, shape = CircleShape),
+                modifier = Modifier
+                    .background(Color.White, shape = CircleShape)
+                    .fillMaxSize(0.6f),
                 contentDescription = "Checkmark",
             )
         } else {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_radio_button_unchecked_24),
-                tint = Color.Gray.copy(alpha = 0.8f),
-                modifier = Modifier.background(Color.Transparent, shape = CircleShape),
+                tint = Color.Gray,
+                modifier = Modifier
+                    .background(Color.Transparent, shape = CircleShape)
+                    .fillMaxSize(0.6f),
                 contentDescription = "Circle"
             )
         }
@@ -101,7 +107,7 @@ private fun PreviewTaskTitleOverFlow() {
     CheckoffTheme {
         TaskCard(
             "Go fishing asdhsajdhajksdjsahdaskjdasjhdjkashdkjashdkjashjkdasjkdhasjkhdjkashdkjashd",
-            "I love fishing."
+            "I love fishing.",
         )
     }
 }
