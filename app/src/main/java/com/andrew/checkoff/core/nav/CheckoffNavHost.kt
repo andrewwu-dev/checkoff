@@ -22,7 +22,6 @@ fun CheckoffNavHost() {
         composable(Route.ADD_TASK) {
             AddTaskScreen(
                 onBackPressed = navController::popBackStack,
-                onDonePressed = navController::popBackStack,
             )
         }
     }

@@ -31,8 +31,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andrew.checkoff.R
-import com.andrew.checkoff.ui.theme.CheckoffTheme
+import com.andrew.checkoff.core.theme.CheckoffTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,10 +87,10 @@ internal fun MaxLimitTextField(
 @Composable
 internal fun AddTaskScreen(
     onBackPressed: () -> Unit,
-    onDonePressed: () -> Unit,
     viewModel: AddTaskViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
+    val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     var titleText by remember { mutableStateOf("") }
     var descText by remember { mutableStateOf("") }
 
@@ -97,7 +98,10 @@ internal fun AddTaskScreen(
         topBar = { AddTaskTopBar(onBackPressed) },
         floatingActionButton = {
             // add a finish button
-            FloatingActionButton(onClick = onDonePressed) {
+            FloatingActionButton(onClick = {
+                viewModel.onDonePressed()
+                onBackPressed()
+            }) {
                 Text(text = stringResource(id = R.string.done))
             }
         }
@@ -116,7 +120,10 @@ internal fun AddTaskScreen(
                 imeAction = ImeAction.Next,
                 placeholder = stringResource(R.string.title),
                 focusManager = focusManager,
-                onValueChange = { titleText = it })
+                onValueChange = {
+                    titleText = it
+                    viewState.title = it
+                })
             Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
             MaxLimitTextField(
                 maxLimit = 128,
@@ -124,7 +131,10 @@ internal fun AddTaskScreen(
                 text = descText,
                 placeholder = stringResource(R.string.description),
                 focusManager = focusManager,
-                onValueChange = { descText = it })
+                onValueChange = {
+                    descText = it
+                    viewState.title = it
+                })
         }
     }
 }
@@ -133,6 +143,6 @@ internal fun AddTaskScreen(
 @Composable
 private fun AddTaskScreenPreview() {
     CheckoffTheme {
-        AddTaskScreen({}, {})
+        AddTaskScreen({})
     }
 }

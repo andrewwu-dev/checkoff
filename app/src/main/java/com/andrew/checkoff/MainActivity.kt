@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.andrew.checkoff.core.nav.CheckoffNavHost
-import com.andrew.checkoff.ui.theme.CheckoffTheme
+import com.andrew.checkoff.core.theme.CheckoffTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

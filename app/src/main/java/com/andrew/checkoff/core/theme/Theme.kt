@@ -1,4 +1,4 @@
-package com.andrew.checkoff.ui.theme
+package com.andrew.checkoff.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

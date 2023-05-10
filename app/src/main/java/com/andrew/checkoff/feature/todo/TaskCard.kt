@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andrew.checkoff.R
-import com.andrew.checkoff.ui.theme.CheckoffTheme
+import com.andrew.checkoff.core.theme.CheckoffTheme
 
 @Composable
 internal fun TaskCard(
@@ -53,7 +52,7 @@ internal fun TaskCard(
                 onChecked = { checkedState.value = !checkedState.value },
             )
             Column(
-                modifier = Modifier.padding(start = 0.dp, top = 15.dp)
+                modifier = Modifier.padding(start = 0.dp, top = 13.dp)
             ) {
                 Text(text = title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
                 Text(text = desc, style = MaterialTheme.typography.bodySmall, maxLines = 1)

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andrew.checkoff.R
-import com.andrew.checkoff.ui.theme.CheckoffTheme
+import com.andrew.checkoff.core.theme.CheckoffTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +61,10 @@ internal fun TodoScreen(
             modifier = Modifier
                 .padding(contentPadding)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(vertical = dimensionResource(R.dimen.padding_large), horizontal = dimensionResource(R.dimen.padding_medium)),
+            contentPadding = PaddingValues(
+                vertical = dimensionResource(R.dimen.padding_large),
+                horizontal = dimensionResource(R.dimen.padding_medium)
+            ),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(items = viewState.value.tasks) { _, item ->
