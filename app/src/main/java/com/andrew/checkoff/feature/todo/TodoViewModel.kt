@@ -37,7 +37,7 @@ class TodoViewModel @Inject constructor(
     }
 
     fun onAddTaskPressed() {
-        sendUiEvent(UiEvent.Navigate(Route.ADD_TASK))
+        sendUiEvent(UiEvent.Navigate(Route.ADD_EDIT_TASK))
     }
 
     fun onCheckBoxPressed(item: TaskItem) {
@@ -47,12 +47,18 @@ class TodoViewModel @Inject constructor(
     }
 
     fun onTaskPressed(task: TaskItem) {
-        sendUiEvent(UiEvent.Navigate(Route.ADD_TASK + "?taskId=${task.id}"))
+        sendUiEvent(UiEvent.Navigate(Route.ADD_EDIT_TASK + "?taskId=${task.id}"))
     }
 
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.send(event)
+        }
+    }
+
+    fun onTaskSwiped(task: TaskItem) {
+        viewModelScope.launch {
+            taskRepository.deleteTask(task)
         }
     }
 }

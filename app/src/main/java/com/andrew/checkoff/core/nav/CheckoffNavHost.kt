@@ -24,7 +24,7 @@ fun CheckoffNavHost() {
             )
         }
         composable(
-            Route.ADD_TASK + "?taskId={taskId}",
+            Route.ADD_EDIT_TASK + "?taskId={taskId}",
             arguments = listOf(
                 navArgument("taskId") {
                     type = NavType.IntType

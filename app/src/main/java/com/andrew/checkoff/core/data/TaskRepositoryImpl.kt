@@ -20,12 +20,13 @@ class TaskRepositoryImpl @Inject constructor(
         taskDao.update(task.asDatabaseModel())
     }
 
-    override suspend fun deleteTask(id: Int) {
-        taskDao.delete(id)
+    override suspend fun deleteTask(task: TaskItem) {
+        taskDao.delete(task.asDatabaseModel())
     }
 
-    override suspend fun getTaskById(id: Int): TaskItem? {
-        return taskDao.getTaskById(id)?.asExternalModel()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun getTaskById(id: Int): Flow<TaskItem?> {
+        return taskDao.getTaskById(id).mapLatest { it?.asExternalModel() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

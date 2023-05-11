@@ -20,15 +20,16 @@ class AddEditTaskViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(AddEditTaskState())
     internal val viewState: StateFlow<AddEditTaskState> get() = _viewState
     val taskId = savedStateHandle.get<Int>("taskId")
+    val isEditMode = taskId != -1
 
     init {
         if (taskId != null) {
             viewModelScope.launch {
-                taskRepository.getTaskById(taskId)?.let { taskItem ->
+                taskRepository.getTaskById(taskId).collect { task ->
                     _viewState.update {
                         it.copy(
-                            title = "taskItem.title",
-                            desc = "taskItem.desc",
+                            title = task?.title ?: "",
+                            desc = task?.desc ?: "",
                         )
                     }
                 }
@@ -37,14 +38,30 @@ class AddEditTaskViewModel @Inject constructor(
         }
     }
 
-    fun onDonePressed(title: String, desc: String) {
+    fun onDonePressed() {
         viewModelScope.launch {
             taskRepository.addTask(
                 TaskItem(
-                    id = taskId,
-                    title = title,
-                    desc = desc,
+                    id = if (isEditMode) taskId else null,
+                    title = _viewState.value.title,
+                    desc = _viewState.value.desc,
                 )
+            )
+        }
+    }
+
+    fun onTitleChanged(title: String) {
+        _viewState.update {
+            it.copy(
+                title = title
+            )
+        }
+    }
+
+    fun onDescChanged(desc: String) {
+        _viewState.update {
+            it.copy(
+                desc = desc
             )
         }
     }

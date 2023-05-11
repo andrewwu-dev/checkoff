@@ -12,9 +12,17 @@ data class TaskItem(
     val completed: Boolean = false,
 )
 
-fun TaskItem.asDatabaseModel() = TaskItemEntity(
-    id = id ?: -1,
-    title = title,
-    desc = desc,
-    completed = completed,
-)
+fun TaskItem.asDatabaseModel() = if (id == null) {
+    TaskItemEntity(
+        title = title,
+        desc = desc,
+        completed = completed,
+    )
+} else {
+    TaskItemEntity(
+        id = id,
+        title = title,
+        desc = desc,
+        completed = completed,
+    )
+}

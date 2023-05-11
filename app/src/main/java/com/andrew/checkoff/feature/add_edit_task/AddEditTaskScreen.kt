@@ -5,48 +5,55 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andrew.checkoff.R
 import com.andrew.checkoff.core.theme.CheckoffTheme
 import com.andrew.checkoff.core.ui.MaxLimitTextField
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddTaskTopBar(
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.whatWouldYouLikeToDo)) },
+        title = { Text("") },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
-                Icon(Icons.Filled.ArrowBack, "backIcon")
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    tint = Color.Black,
+                    contentDescription = "backIcon"
+                )
             }
         },
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 0.dp,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddTaskScreen(
     onBackPressed: () -> Unit,
@@ -54,23 +61,27 @@ internal fun AddTaskScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
-    var titleText by remember { mutableStateOf(viewState.title) }
-    var descText by remember { mutableStateOf(viewState.desc) }
 
     Scaffold(
         topBar = { AddTaskTopBar(onBackPressed) },
         floatingActionButton = {
-            // add a finish button
-            FloatingActionButton(onClick = {
-                viewModel.onDonePressed(titleText, descText)
-                onBackPressed()
-            }) {
-                Text(text = stringResource(id = R.string.done))
+            FloatingActionButton(
+                shape = CircleShape,
+                onClick = {
+                    viewModel.onDonePressed()
+                    onBackPressed()
+                },
+                backgroundColor = MaterialTheme.colors.primary,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Done,
+                    tint = Color.White,
+                    contentDescription = "Done"
+                )
             }
         }
     ) { contentPadding ->
         Column(
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
@@ -80,26 +91,38 @@ internal fun AddTaskScreen(
                     })
                 }
         ) {
-            Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.paddingAppBar)))
-            MaxLimitTextField(
-                maxLimit = 48,
-                maxLines = 2,
-                text = titleText,
-                placeholder = stringResource(R.string.newTask),
-                focusManager = focusManager,
-                onValueChange = {
-                    titleText = it
-                })
-            Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
-            MaxLimitTextField(
-                maxLimit = 128,
-                maxLines = 4,
-                text = descText,
-                placeholder = stringResource(R.string.description),
-                focusManager = focusManager,
-                onValueChange = {
-                    descText = it
-                })
+            Text(
+                text = stringResource(id = R.string.whatWouldYouLikeToDo),
+                color = Color.Black,
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.h4.fontSize,
+                ),
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium))
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.paddingAppBar)))
+                MaxLimitTextField(
+                    maxLimit = 48,
+                    maxLines = 2,
+                    text = viewState.title,
+                    placeholder = stringResource(R.string.newTask),
+                    focusManager = focusManager,
+                    onValueChange = {
+                        viewModel.onTitleChanged(it)
+                    })
+                Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
+                MaxLimitTextField(
+                    maxLimit = 128,
+                    maxLines = 4,
+                    text = viewState.desc,
+                    placeholder = stringResource(R.string.description),
+                    focusManager = focusManager,
+                    onValueChange = {
+                        viewModel.onDescChanged(it)
+                    })
+            }
         }
     }
 }

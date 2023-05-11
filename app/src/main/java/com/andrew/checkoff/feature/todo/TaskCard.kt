@@ -8,17 +8,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -36,9 +36,7 @@ internal fun TaskCard(
 ) {
     Card(
         shape = RoundedCornerShape(5.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+        backgroundColor = MaterialTheme.colors.secondary,
         modifier = modifier.fillMaxWidth(),
     ) {
         Row(
@@ -48,17 +46,15 @@ internal fun TaskCard(
                     bottom = dimensionResource(R.dimen.padding_medium),
                     end = dimensionResource(R.dimen.padding_medium)
                 )
-                .background(color = MaterialTheme.colorScheme.primaryContainer),
         ) {
             CircleCheckbox(
                 selected = task.completed,
                 onChecked = { onCheckBoxPressed(task) },
             )
-            Column(
-                modifier = Modifier.padding(start = 0.dp, top = 13.dp)
-            ) {
-                Text(text = task.title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
-                Text(text = task.desc, style = MaterialTheme.typography.bodySmall, maxLines = 1)
+            Column (Modifier.padding(top = 8.dp)) {
+                Text(color = Color.Black, text = task.title, style = MaterialTheme.typography.h5, maxLines = 2)
+                if (task.desc.isNotEmpty())
+                    Text(color = Color.Black, text = task.desc, style = MaterialTheme.typography.body1, maxLines = 2)
             }
         }
     }
@@ -73,10 +69,10 @@ fun CircleCheckbox(selected: Boolean, enabled: Boolean = true, onChecked: () -> 
         if (selected) {
             Icon(
                 imageVector = Icons.Filled.CheckCircle,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .background(Color.White, shape = CircleShape)
-                    .fillMaxSize(0.6f),
+                    .scale(1.2f)
+                    .background(Color.White, shape = CircleShape),
                 contentDescription = "Checkmark",
             )
         } else {
@@ -84,8 +80,8 @@ fun CircleCheckbox(selected: Boolean, enabled: Boolean = true, onChecked: () -> 
                 painter = painterResource(id = R.drawable.baseline_radio_button_unchecked_24),
                 tint = Color.Gray,
                 modifier = Modifier
-                    .background(Color.Transparent, shape = CircleShape)
-                    .fillMaxSize(0.6f),
+                    .scale(1.2f)
+                    .background(Color.Transparent, shape = CircleShape),
                 contentDescription = "Circle"
             )
         }
