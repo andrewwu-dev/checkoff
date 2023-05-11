@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andrew.checkoff.R
+import com.andrew.checkoff.core.nav.UiEvent
 import com.andrew.checkoff.core.theme.CheckoffTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,17 +40,24 @@ internal fun MainTopBar() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TodoScreen(
-    onAddPressed: () -> Unit = {},
-    onTaskPressed: (Int) -> Unit = {},
+    onNaviateEvent: (UiEvent.Navigate) -> Unit,
     viewModel: TodoViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Navigate -> onNaviateEvent(event)
+                else -> Unit
+            }
+        }
+    }
     val viewState = viewModel.viewState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = { MainTopBar() },
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
-                onClick = onAddPressed,
+                onClick = viewModel::onAddTaskPressed,
                 containerColor = MaterialTheme.colorScheme.onPrimary,
             ) {
                 Icon(
@@ -70,9 +79,11 @@ internal fun TodoScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(items = viewState.value.tasks) { _, item ->
-                TaskCard(title = item.title, desc = item.desc, modifier = Modifier.clickable {
-                    item.id?.let { onTaskPressed(it) }
-                })
+                TaskCard(
+                    modifier = Modifier.clickable { viewModel.onTaskPressed(item) },
+                    task = item,
+                    onCheckBoxPressed = viewModel::onCheckBoxPressed
+                )
             }
         }
     }
@@ -82,6 +93,8 @@ internal fun TodoScreen(
 @Composable
 private fun PreviewTodoScreen() {
     CheckoffTheme {
-        TodoScreen()
+        TodoScreen(
+            onNaviateEvent = {}
+        )
     }
 }

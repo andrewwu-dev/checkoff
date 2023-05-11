@@ -16,6 +16,10 @@ class TaskRepositoryImpl @Inject constructor(
         taskDao.insert(task.asDatabaseModel())
     }
 
+    override suspend fun updateTask(task: TaskItem) {
+        taskDao.update(task.asDatabaseModel())
+    }
+
     override suspend fun deleteTask(id: Int) {
         taskDao.delete(id)
     }

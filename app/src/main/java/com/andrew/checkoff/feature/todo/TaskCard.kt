@@ -17,8 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,15 +25,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andrew.checkoff.R
+import com.andrew.checkoff.core.model.TaskItem
 import com.andrew.checkoff.core.theme.CheckoffTheme
 
 @Composable
 internal fun TaskCard(
-    title: String,
-    desc: String,
     modifier: Modifier = Modifier,
+    task: TaskItem,
+    onCheckBoxPressed: (TaskItem) -> Unit,
 ) {
-    val checkedState = remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(5.dp),
         colors = CardDefaults.cardColors(
@@ -53,14 +51,14 @@ internal fun TaskCard(
                 .background(color = MaterialTheme.colorScheme.primaryContainer),
         ) {
             CircleCheckbox(
-                selected = checkedState.value,
-                onChecked = { checkedState.value = !checkedState.value },
+                selected = task.completed,
+                onChecked = { onCheckBoxPressed(task) },
             )
             Column(
                 modifier = Modifier.padding(start = 0.dp, top = 13.dp)
             ) {
-                Text(text = title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
-                Text(text = desc, style = MaterialTheme.typography.bodySmall, maxLines = 1)
+                Text(text = task.title, style = MaterialTheme.typography.titleMedium, maxLines = 2)
+                Text(text = task.desc, style = MaterialTheme.typography.bodySmall, maxLines = 1)
             }
         }
     }
@@ -99,8 +97,11 @@ fun CircleCheckbox(selected: Boolean, enabled: Boolean = true, onChecked: () -> 
 private fun PreviewTask() {
     CheckoffTheme {
         TaskCard(
-            "Go fishing",
-            "I love fishing."
+            task = TaskItem(
+                title = "Go fishing",
+                desc = "I love fishing.",
+            ),
+            onCheckBoxPressed = {},
         )
     }
 }
@@ -110,8 +111,11 @@ private fun PreviewTask() {
 private fun PreviewTaskTitleOverFlow() {
     CheckoffTheme {
         TaskCard(
-            "Go fishing asdhsajdhajksdjsahdaskjdasjhdjkashdkjashdkjashjkdasjkdhasjkhdjkashdkjashd",
-            "I love fishing.",
+            task = TaskItem(
+                title = "Go fishing asdhsajdhajksdjsahdaskjdasjhdjkashdkjashdkjashjkdasjkdhasjkhdjkashdkjashd",
+                desc = "I love fishing.",
+            ),
+            onCheckBoxPressed = {},
         )
     }
 }

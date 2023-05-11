@@ -20,8 +20,7 @@ fun CheckoffNavHost() {
             Route.TODO,
         ) {
             TodoScreen(
-                onAddPressed = { navController.navigate(Route.ADD_TASK) },
-                onTaskPressed = { taskId -> navController.navigate(Route.ADD_TASK + "?taskId=${taskId}") },
+                onNaviateEvent = { navController.navigate(it.route) }
             )
         }
         composable(
