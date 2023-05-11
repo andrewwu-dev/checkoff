@@ -1,4 +1,4 @@
-package com.andrew.checkoff.feature.add_task
+package com.andrew.checkoff.feature.add_edit_task
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddTaskViewModel @Inject constructor(
+class AddEditTaskViewModel @Inject constructor(
     private val taskRepository: TaskRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(AddTaskState())
-    internal val viewState: StateFlow<AddTaskState> get() = _viewState
+    private val _viewState = MutableStateFlow(AddEditTaskState())
+    internal val viewState: StateFlow<AddEditTaskState> get() = _viewState
     val taskId = savedStateHandle.get<Int>("taskId")
 
     init {

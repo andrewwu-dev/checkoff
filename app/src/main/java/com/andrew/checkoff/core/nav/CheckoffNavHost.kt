@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.andrew.checkoff.feature.add_task.AddTaskScreen
+import com.andrew.checkoff.feature.add_edit_task.AddTaskScreen
 import com.andrew.checkoff.feature.todo.TodoScreen
 
 @Composable

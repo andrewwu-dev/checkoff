@@ -1,5 +1,6 @@
-package com.andrew.checkoff.feature.add_task
+package com.andrew.checkoff.feature.add_edit_task
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +20,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,7 +50,7 @@ internal fun AddTaskTopBar(
 @Composable
 internal fun AddTaskScreen(
     onBackPressed: () -> Unit,
-    viewModel: AddTaskViewModel = hiltViewModel(),
+    viewModel: AddEditTaskViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -73,13 +74,17 @@ internal fun AddTaskScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                }
         ) {
             Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.paddingAppBar)))
             MaxLimitTextField(
                 maxLimit = 48,
                 maxLines = 2,
                 text = titleText,
-                imeAction = ImeAction.Next,
                 placeholder = stringResource(R.string.newTask),
                 focusManager = focusManager,
                 onValueChange = {
