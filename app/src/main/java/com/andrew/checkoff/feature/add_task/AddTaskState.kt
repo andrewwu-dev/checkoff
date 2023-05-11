@@ -1,6 +1,6 @@
 package com.andrew.checkoff.feature.add_task
 
-class AddTaskState {
-    var title: String = ""
-    var desc: String = ""
-}
+internal data class AddTaskState(
+    var title: String = "",
+    var desc: String = "",
+)

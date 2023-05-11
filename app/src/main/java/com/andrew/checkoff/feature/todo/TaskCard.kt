@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.andrew.checkoff.core.theme.CheckoffTheme
 internal fun TaskCard(
     title: String,
     desc: String,
+    modifier: Modifier = Modifier,
 ) {
     val checkedState = remember { mutableStateOf(false) }
     Card(
@@ -39,12 +41,15 @@ internal fun TaskCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
         Row(
             verticalAlignment = Alignment.Top,
             modifier = Modifier
-                .padding(bottom = 10.dp, end = 10.dp)
+                .padding(
+                    bottom = dimensionResource(R.dimen.padding_medium),
+                    end = dimensionResource(R.dimen.padding_medium)
+                )
                 .background(color = MaterialTheme.colorScheme.primaryContainer),
         ) {
             CircleCheckbox(

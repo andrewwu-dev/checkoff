@@ -18,7 +18,6 @@ class TodoViewModel @Inject constructor(
     internal val viewState: StateFlow<TodoState> get() = _viewState
 
     init {
-        println("TEST")
         viewModelScope.launch {
             taskRepository.getTasks().collect { tasks ->
                 _viewState.update {

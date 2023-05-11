@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Checkoff</string>
-    <string name="addTask">Add Task</string>
+    <string name="whatWouldYouLikeToDo">What would you like to do?</string>
     <string name="description">Description</string>
-    <string name="title">Title</string>
+    <string name="newTask">New task</string>
     <string name="done">Done</string>
 </resources>

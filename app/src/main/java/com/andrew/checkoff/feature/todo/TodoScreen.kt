@@ -1,5 +1,6 @@
 package com.andrew.checkoff.feature.todo
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ internal fun MainTopBar() {
 @Composable
 internal fun TodoScreen(
     onAddPressed: () -> Unit = {},
+    onTaskPressed: (Int) -> Unit = {},
     viewModel: TodoViewModel = hiltViewModel()
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle()
@@ -68,7 +70,9 @@ internal fun TodoScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(items = viewState.value.tasks) { _, item ->
-                TaskCard(title = item.title, desc = item.desc)
+                TaskCard(title = item.title, desc = item.desc, modifier = Modifier.clickable {
+                    item.id?.let { onTaskPressed(it) }
+                })
             }
         }
     }

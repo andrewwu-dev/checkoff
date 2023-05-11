@@ -1,7 +1,6 @@
 package com.andrew.checkoff.core.database.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,8 +13,8 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: TaskItemEntity)
 
-    @Delete
-    suspend fun delete(task: TaskItemEntity)
+    @Query("DELETE FROM task WHERE id = :id")
+    suspend fun delete(id: Int)
 
     @Query("SELECT * FROM task WHERE id = :id")
     suspend fun getTaskById(id: Int): TaskItemEntity?

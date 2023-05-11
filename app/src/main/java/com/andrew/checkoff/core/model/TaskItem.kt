@@ -13,6 +13,7 @@ data class TaskItem(
 )
 
 fun TaskItem.asDatabaseModel() = TaskItemEntity(
+    id = id ?: -1,
     title = title,
     desc = desc,
     completed = completed,
