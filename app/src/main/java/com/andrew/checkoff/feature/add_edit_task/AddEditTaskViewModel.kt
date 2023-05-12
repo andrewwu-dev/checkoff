@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andrew.checkoff.core.data.TaskRepository
 import com.andrew.checkoff.core.model.TaskItem
+import com.andrew.checkoff.core.nav.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +22,9 @@ class AddEditTaskViewModel @Inject constructor(
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(AddEditTaskState())
     internal val viewState: StateFlow<AddEditTaskState> get() = _viewState
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
     val taskId = savedStateHandle.get<Int>("taskId")
     val isEditMode = taskId != -1
 
@@ -47,6 +53,17 @@ class AddEditTaskViewModel @Inject constructor(
                     desc = _viewState.value.desc,
                 )
             )
+        }
+        sendUiEvent(UiEvent.PopBackStack)
+    }
+
+    fun onBackPress() {
+        sendUiEvent(UiEvent.PopBackStack)
+    }
+
+    private fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 

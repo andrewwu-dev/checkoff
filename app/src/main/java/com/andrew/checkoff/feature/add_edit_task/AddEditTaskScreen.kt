@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andrew.checkoff.R
+import com.andrew.checkoff.core.nav.UiEvent
 import com.andrew.checkoff.core.theme.CheckoffTheme
 import com.andrew.checkoff.core.ui.MaxLimitTextField
 
@@ -56,20 +58,26 @@ internal fun AddTaskTopBar(
 
 @Composable
 internal fun AddTaskScreen(
-    onBackPressed: () -> Unit,
+    onPopBackStack: () -> Unit,
     viewModel: AddEditTaskViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.PopBackStack -> onPopBackStack()
+                else -> Unit
+            }
+        }
+    }
     val focusManager = LocalFocusManager.current
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
-
     Scaffold(
-        topBar = { AddTaskTopBar(onBackPressed) },
+        topBar = { AddTaskTopBar({ viewModel.onBackPress() }) },
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
                 onClick = {
                     viewModel.onDonePressed()
-                    onBackPressed()
                 },
                 backgroundColor = MaterialTheme.colors.primary,
             ) {

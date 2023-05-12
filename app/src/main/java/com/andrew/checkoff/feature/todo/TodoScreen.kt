@@ -36,13 +36,14 @@ import com.andrew.checkoff.feature.todo.ui.SwipableTask
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TodoScreen(
-    onNaviateEvent: (UiEvent.Navigate) -> Unit,
+    onNavigateEvent: (UiEvent.Navigate) -> Unit,
     viewModel: TodoViewModel = hiltViewModel()
 ) {
     LaunchedEffect(true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UiEvent.Navigate -> onNaviateEvent(event)
+                is UiEvent.Navigate -> onNavigateEvent(event)
+                is UiEvent.ShowSnackbar -> {}
                 else -> Unit
             }
         }
@@ -116,7 +117,7 @@ fun AddButton(onClick: () -> Unit) {
 private fun PreviewTodoScreen() {
     CheckoffTheme {
         TodoScreen(
-            onNaviateEvent = {}
+            onNavigateEvent = {}
         )
     }
 }

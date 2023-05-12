@@ -20,7 +20,7 @@ fun CheckoffNavHost() {
             Route.TODO,
         ) {
             TodoScreen(
-                onNaviateEvent = { navController.navigate(it.route) }
+                onNavigateEvent = { navController.navigate(it.route) }
             )
         }
         composable(
@@ -33,7 +33,7 @@ fun CheckoffNavHost() {
             ),
         ) {
             AddTaskScreen(
-                onBackPressed = navController::popBackStack,
+                onPopBackStack = navController::popBackStack,
             )
         }
     }
