@@ -1,9 +1,8 @@
-package com.andrew.checkoff.feature.todo
+package com.andrew.checkoff.feature.todo.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -51,10 +50,20 @@ internal fun TaskCard(
                 selected = task.completed,
                 onChecked = { onCheckBoxPressed(task) },
             )
-            Column (Modifier.padding(top = 8.dp)) {
-                Text(color = Color.Black, text = task.title, style = MaterialTheme.typography.h5, maxLines = 2)
+            Column(Modifier.padding(top = 8.dp)) {
+                Text(
+                    color = Color.Black,
+                    text = task.title,
+                    style = MaterialTheme.typography.h5,
+                    maxLines = 2
+                )
                 if (task.desc.isNotEmpty())
-                    Text(color = Color.Black, text = task.desc, style = MaterialTheme.typography.body1, maxLines = 2)
+                    Text(
+                        color = Color.Black,
+                        text = task.desc,
+                        style = MaterialTheme.typography.body1,
+                        maxLines = 2
+                    )
             }
         }
     }

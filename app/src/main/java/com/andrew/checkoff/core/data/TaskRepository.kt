@@ -12,5 +12,5 @@ interface TaskRepository {
 
     suspend fun getTaskById(id: Int): Flow<TaskItem?>
 
-    fun getTasks(): Flow<List<TaskItem>>
+    suspend fun getTasks(): Flow<List<TaskItem>>
 }

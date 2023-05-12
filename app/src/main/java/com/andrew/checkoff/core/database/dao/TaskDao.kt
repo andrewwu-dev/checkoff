@@ -14,6 +14,9 @@ interface TaskDao {
     @Upsert
     suspend fun insert(task: TaskItemEntity)
 
+    @Upsert
+    suspend fun insertAll(tasks: List<TaskItemEntity>)
+
     @Update
     suspend fun update(task: TaskItemEntity)
 

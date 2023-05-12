@@ -8,7 +8,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DaosModule {
+object DaoModule {
     @Provides
     fun provideTaskDao(
         checkoffDatabase: CheckoffDatabase

@@ -15,7 +15,7 @@ data class TaskItemEntity(
     val completed: Boolean = false,
 )
 
-fun TaskItemEntity.asExternalModel() = TaskItem(
+fun TaskItemEntity.asDomainModel() = TaskItem(
     id = id,
     title = title,
     desc = desc,

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,13 +27,18 @@ class TodoViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            taskRepository.getTasks().collect { tasks ->
-                _viewState.update {
-                    it.copy(
-                        tasks = tasks
-                    )
+            taskRepository.getTasks()
+                .onStart {
+                    _viewState.update { it.copy(isLoading = true) }
                 }
-            }
+                .collect { tasks ->
+                    _viewState.update {
+                        it.copy(
+                            tasks = tasks,
+                            isLoading = false,
+                        )
+                    }
+                }
         }
     }
 
