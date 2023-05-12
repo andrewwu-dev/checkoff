@@ -36,6 +36,7 @@ import com.andrew.checkoff.R
 import com.andrew.checkoff.core.nav.UiEvent
 import com.andrew.checkoff.core.theme.CheckoffTheme
 import com.andrew.checkoff.core.ui.MaxLimitTextField
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun AddTaskTopBar(
@@ -64,7 +65,7 @@ internal fun AddTaskScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(true) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.uiEvent.collectLatest { event ->
             when (event) {
                 is UiEvent.PopBackStack -> onPopBackStack()
                 is UiEvent.ShowSnackbar -> {

@@ -1,5 +1,6 @@
 package com.andrew.checkoff.feature.todo
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -20,10 +22,12 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,19 +37,22 @@ import com.andrew.checkoff.R
 import com.andrew.checkoff.core.nav.UiEvent
 import com.andrew.checkoff.core.theme.CheckoffTheme
 import com.andrew.checkoff.feature.todo.ui.SwipableTask
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 internal fun TodoScreen(
     onNavigateEvent: (UiEvent.Navigate) -> Unit,
     viewModel: TodoViewModel = hiltViewModel()
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(true) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.uiEvent.collectLatest { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigateEvent(event)
                 is UiEvent.ShowSnackbar -> {
-                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                    val result = snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.actionMsg
                     )
@@ -60,19 +67,17 @@ internal fun TodoScreen(
     }
     val viewState = viewModel.viewState.collectAsStateWithLifecycle()
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
         floatingActionButton = { AddButton { viewModel.onAddTaskPressed() } }
     ) { contentPadding ->
         if (viewState.value.isLoading) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
+            LoadingSpinner(
+                Modifier
                     .fillMaxSize()
                     .padding(contentPadding)
-            ) {
-                CircularProgressIndicator()
-            }
+            )
+        } else if (viewState.value.tasks.isEmpty()) {
+            TrophyDrawing()
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -95,6 +100,37 @@ internal fun TodoScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun LoadingSpinner(modifier: Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun TrophyDrawing() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(R.drawable.trophy),
+            contentDescription = "trophy",
+            modifier = Modifier.fillMaxSize(0.4f)
+        )
+        Text(
+            text = "Congratulations,\n You're all done!", style = TextStyle(
+                fontSize = MaterialTheme.typography.h4.fontSize
+            )
+        )
     }
 }
 
