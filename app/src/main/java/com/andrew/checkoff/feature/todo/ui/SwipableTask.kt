@@ -22,20 +22,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.andrew.checkoff.R
 import com.andrew.checkoff.core.model.TaskItem
+import com.andrew.checkoff.core.nav.UiEvent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SwipableTask(
     item: TaskItem,
-    onSwipe: (TaskItem) -> Unit,
+    onSwipe: (TaskItem, UiEvent) -> Unit,
     onTaskPressed: (TaskItem) -> Unit,
     onCheckBoxPressed: (TaskItem) -> Unit,
 ) {
+    val taskDeleted = stringResource(R.string.task_deleted)
+    val undo = stringResource(R.string.undo)
     val dismissState = rememberDismissState {
         if (it == DismissValue.DismissedToStart) {
-            onSwipe(item)
+            onSwipe(
+                item,
+                UiEvent.ShowSnackbar(
+                    message = taskDeleted,
+                    actionMsg = undo,
+                )
+            )
         }
         true
     }

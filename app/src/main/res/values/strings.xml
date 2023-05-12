@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Checkoff</string>
-    <string name="whatWouldYouLikeToDo">What would\nyou like to do?</string>
+    <string name="what_would_you_like_to_do">What would\nyou like to do?</string>
     <string name="description">Description (optional)</string>
-    <string name="newTask">New task</string>
+    <string name="new_task">New task</string>
     <string name="done">Done</string>
+    <string name="something_went_wrong">"Something went wrong"</string>
+    <string name="task_deleted">Task deleted!</string>
+    <string name="undo">undo</string>
 </resources>

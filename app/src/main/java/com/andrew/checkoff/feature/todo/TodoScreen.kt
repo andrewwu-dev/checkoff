@@ -9,14 +9,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,23 +34,33 @@ import com.andrew.checkoff.core.nav.UiEvent
 import com.andrew.checkoff.core.theme.CheckoffTheme
 import com.andrew.checkoff.feature.todo.ui.SwipableTask
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun TodoScreen(
     onNavigateEvent: (UiEvent.Navigate) -> Unit,
     viewModel: TodoViewModel = hiltViewModel()
 ) {
+    val scaffoldState = rememberScaffoldState()
     LaunchedEffect(true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigateEvent(event)
-                is UiEvent.ShowSnackbar -> {}
+                is UiEvent.ShowSnackbar -> {
+                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.actionMsg
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        viewModel.onUndoDeletePressed()
+                    }
+                }
+
                 else -> Unit
             }
         }
     }
     val viewState = viewModel.viewState.collectAsStateWithLifecycle()
     Scaffold(
+        scaffoldState = scaffoldState,
         floatingActionButton = { AddButton { viewModel.onAddTaskPressed() } }
     ) { contentPadding ->
         if (viewState.value.isLoading) {

@@ -16,6 +16,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -61,10 +62,18 @@ internal fun AddTaskScreen(
     onPopBackStack: () -> Unit,
     viewModel: AddEditTaskViewModel = hiltViewModel(),
 ) {
+    val scaffoldState = rememberScaffoldState()
     LaunchedEffect(true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.PopBackStack -> onPopBackStack()
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.actionMsg
+                    )
+                }
+
                 else -> Unit
             }
         }
@@ -100,7 +109,7 @@ internal fun AddTaskScreen(
                 }
         ) {
             Text(
-                text = stringResource(id = R.string.whatWouldYouLikeToDo),
+                text = stringResource(id = R.string.what_would_you_like_to_do),
                 color = Color.Black,
                 style = TextStyle(
                     fontSize = MaterialTheme.typography.h4.fontSize,
@@ -115,7 +124,7 @@ internal fun AddTaskScreen(
                     maxLimit = 48,
                     maxLines = 2,
                     text = viewState.title,
-                    placeholder = stringResource(R.string.newTask),
+                    placeholder = stringResource(R.string.new_task),
                     focusManager = focusManager,
                     onValueChange = {
                         viewModel.onTitleChanged(it)

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -30,6 +31,13 @@ class TodoViewModel @Inject constructor(
             taskRepository.getTasks()
                 .onStart {
                     _viewState.update { it.copy(isLoading = true) }
+                }
+                .catch { error ->
+                    error.message?.let {
+                        UiEvent.ShowSnackbar(
+                            message = it
+                        )
+                    }?.let { sendUiEvent(it) }
                 }
                 .collect { tasks ->
                     _viewState.update {
@@ -56,15 +64,26 @@ class TodoViewModel @Inject constructor(
         sendUiEvent(UiEvent.Navigate(Route.ADD_EDIT_TASK + "?taskId=${task.id}"))
     }
 
-    private fun sendUiEvent(event: UiEvent) {
+    fun onTaskSwiped(
+        task: TaskItem,
+        uiEvent: UiEvent
+    ) {
         viewModelScope.launch {
-            _uiEvent.send(event)
+            _viewState.update { it.copy(deletedTask = task) }
+            taskRepository.deleteTask(task)
+            sendUiEvent(uiEvent)
         }
     }
 
-    fun onTaskSwiped(task: TaskItem) {
+    fun onUndoDeletePressed() {
         viewModelScope.launch {
-            taskRepository.deleteTask(task)
+            _viewState.value.deletedTask?.let { taskRepository.addTask(it) }
+        }
+    }
+
+    private fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 }
