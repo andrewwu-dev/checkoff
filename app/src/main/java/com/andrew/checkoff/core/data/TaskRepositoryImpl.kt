@@ -4,6 +4,7 @@ import com.andrew.checkoff.core.database.dao.TaskDao
 import com.andrew.checkoff.core.database.model.asDomainModel
 import com.andrew.checkoff.core.model.TaskItem
 import com.andrew.checkoff.core.model.asDatabaseModel
+import com.andrew.checkoff.core.model.asNetworkModel
 import com.andrew.checkoff.core.network.ApiService
 import com.andrew.checkoff.core.network.asDomainModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,14 +17,17 @@ class TaskRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
 ) : TaskRepository {
     override suspend fun addTask(task: TaskItem) {
+        apiService.addTask(task.asNetworkModel())
         taskDao.insert(task.asDatabaseModel())
     }
 
     override suspend fun updateTask(task: TaskItem) {
+        apiService.updateTask(task.id ?: 1, task.asNetworkModel())
         taskDao.update(task.asDatabaseModel())
     }
 
     override suspend fun deleteTask(task: TaskItem) {
+        apiService.deleteTask(task.id ?: 1)
         taskDao.delete(task.asDatabaseModel())
     }
 
@@ -31,10 +35,6 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun getTaskById(id: Int): Flow<TaskItem?> {
         return taskDao.getTaskById(id).mapLatest { it?.asDomainModel() }
     }
-
-    // val remoteFlow = flow { emit(apiService.getTaskById(id).asDomainModel()) }
-    //        val localFlow = taskDao.getTaskById(id).mapLatest { it?.asDomainModel() }
-    //        return flowOf(localFlow, remoteFlow).flattenMerge()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getTasks(): Flow<List<TaskItem>> {
