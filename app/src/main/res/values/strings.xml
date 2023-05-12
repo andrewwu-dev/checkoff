@@ -7,4 +7,5 @@
     <string name="something_went_wrong">"Something went wrong"</string>
     <string name="task_deleted">Task deleted!</string>
     <string name="undo">undo</string>
+    <string name="tasks_require_a_title">Tasks require a title.</string>
 </resources>

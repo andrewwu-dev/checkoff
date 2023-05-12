@@ -57,7 +57,11 @@ class AddEditTaskViewModel @Inject constructor(
         }
     }
 
-    fun onDonePressed() {
+    fun onDonePressed(snackbarEvent: UiEvent) {
+        if (_viewState.value.title.isEmpty()) {
+            sendUiEvent(snackbarEvent)
+            return
+        }
         viewModelScope.launch {
             taskRepository.addTask(
                 TaskItem(

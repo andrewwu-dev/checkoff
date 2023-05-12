@@ -66,12 +66,12 @@ class TodoViewModel @Inject constructor(
 
     fun onTaskSwiped(
         task: TaskItem,
-        uiEvent: UiEvent
+        snackbarEvent: UiEvent
     ) {
         viewModelScope.launch {
             _viewState.update { it.copy(deletedTask = task) }
             taskRepository.deleteTask(task)
-            sendUiEvent(uiEvent)
+            sendUiEvent(snackbarEvent)
         }
     }
 

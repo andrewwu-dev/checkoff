@@ -80,13 +80,19 @@ internal fun AddTaskScreen(
     }
     val focusManager = LocalFocusManager.current
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
+    val emptyTitleMessage = stringResource(R.string.tasks_require_a_title)
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = { AddTaskTopBar({ viewModel.onBackPress() }) },
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
                 onClick = {
-                    viewModel.onDonePressed()
+                    viewModel.onDonePressed(
+                        UiEvent.ShowSnackbar(
+                            message = emptyTitleMessage
+                        )
+                    )
                 },
                 backgroundColor = MaterialTheme.colors.primary,
             ) {

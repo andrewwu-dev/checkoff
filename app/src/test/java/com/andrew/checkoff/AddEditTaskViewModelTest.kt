@@ -50,8 +50,9 @@ class AddEditTaskViewModelTest {
     }
 
     @Test
-    fun `onDonePressed should send UiEvent NavigateBack`() = runTest {
-        addTaskViewModel.onDonePressed()
+    fun `onDonePressed given non-empty title should send UiEvent NavigateBack`() = runTest {
+        addTaskViewModel.onTitleChanged("New Task")
+        addTaskViewModel.onDonePressed(UiEvent.ShowSnackbar(""))
         assertEquals(addTaskViewModel.uiEvent.first(), UiEvent.PopBackStack)
     }
 
@@ -78,7 +79,7 @@ class AddEditTaskViewModelTest {
         )
         addTaskViewModel.onTitleChanged(task.title)
         addTaskViewModel.onDescChanged(task.desc)
-        addTaskViewModel.onDonePressed()
+        addTaskViewModel.onDonePressed(UiEvent.ShowSnackbar(""))
         delay(1000)
         assertEquals(fakeTaskRepository.tasks.count(), 3)
     }
@@ -92,10 +93,18 @@ class AddEditTaskViewModelTest {
         )
         editTaskViewModel.onTitleChanged(task.title)
         editTaskViewModel.onDescChanged(task.desc)
-        editTaskViewModel.onDonePressed()
+        editTaskViewModel.onDonePressed(UiEvent.ShowSnackbar(""))
         delay(1000)
         assertEquals(fakeTaskRepository.tasks.count(), 2)
         assertEquals(fakeTaskRepository.tasks.first().title, task.title)
         assertEquals(fakeTaskRepository.tasks.first().desc, task.desc)
+    }
+
+    @Test
+    fun `onDonePressed empty title should send UiEvent ShowSnackbar`() = runTest {
+        addTaskViewModel.onTitleChanged("")
+        val snackbarEvent = UiEvent.ShowSnackbar("Title cannot be empty")
+        addTaskViewModel.onDonePressed(snackbarEvent)
+        assertEquals(addTaskViewModel.uiEvent.first(), snackbarEvent)
     }
 }
