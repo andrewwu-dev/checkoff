@@ -59,7 +59,7 @@ internal fun TaskCard(
                 )
                 if (task.desc.isNotEmpty())
                     Text(
-                        color = Color.Black,
+                        color = Color.DarkGray,
                         text = task.desc,
                         style = MaterialTheme.typography.body1,
                         maxLines = 2

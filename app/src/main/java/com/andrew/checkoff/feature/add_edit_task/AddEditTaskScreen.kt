@@ -128,13 +128,13 @@ internal fun AddTaskScreen(
             ) {
                 Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.paddingAppBar)))
                 MaxLimitTextField(
-                    maxLimit = 48,
+                    maxLimit = 64,
                     maxLines = 2,
                     text = viewState.title,
                     placeholder = stringResource(R.string.new_task),
                     focusManager = focusManager,
                     onValueChange = {
-                        viewModel.onTitleChanged(it)
+                        if (it.length <= 64) viewModel.onTitleChanged(it)
                     })
                 Spacer(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)))
                 MaxLimitTextField(
@@ -144,7 +144,7 @@ internal fun AddTaskScreen(
                     placeholder = stringResource(R.string.description),
                     focusManager = focusManager,
                     onValueChange = {
-                        viewModel.onDescChanged(it)
+                        if (it.length <= 128) viewModel.onDescChanged(it)
                     })
             }
         }

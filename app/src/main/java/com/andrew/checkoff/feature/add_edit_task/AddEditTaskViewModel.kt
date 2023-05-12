@@ -32,7 +32,7 @@ class AddEditTaskViewModel @Inject constructor(
     val isEditMode = taskId != -1
 
     init {
-        if (taskId != null) {
+        if (isEditMode && taskId != null) {
             viewModelScope.launch {
                 taskRepository.getTaskById(taskId)
                     .catch {

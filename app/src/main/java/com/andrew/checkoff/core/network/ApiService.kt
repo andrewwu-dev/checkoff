@@ -16,7 +16,7 @@ interface ApiService {
     suspend fun addTask(@Body task: TaskItemResponse)
 
     @PATCH(ApiConstants.TODOS_ENDPOINT + "/{id}")
-    suspend fun updateTask(@Path("id") id: Int, task: TaskItemResponse)
+    suspend fun updateTask(@Path("id") id: Int, @Body task: TaskItemResponse)
 
     @DELETE(ApiConstants.TODOS_ENDPOINT + "/{id}")
     suspend fun deleteTask(@Path("id") id: Int)
