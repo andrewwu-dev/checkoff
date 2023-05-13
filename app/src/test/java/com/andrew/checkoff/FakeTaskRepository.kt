@@ -5,7 +5,6 @@ import com.andrew.checkoff.core.model.TaskItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-
 class FakeTaskRepository : TaskRepository {
     val tasks = mutableListOf<TaskItem>(
         TaskItem(1, "Task 1", "Description 1", false),

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -127,7 +128,7 @@ fun TrophyDrawing() {
             modifier = Modifier.fillMaxSize(0.4f)
         )
         Text(
-            text = "Congratulations,\n You're all done!", style = TextStyle(
+            text = stringResource(R.string.congratulations_youre_all_done), style = TextStyle(
                 fontSize = MaterialTheme.typography.h4.fontSize
             )
         )
@@ -137,7 +138,7 @@ fun TrophyDrawing() {
 @Composable
 fun TodayHeader() {
     Text(
-        text = "Today", color = Color.Black, style = TextStyle(
+        text = stringResource(R.string.today), color = Color.Black, style = TextStyle(
             fontSize = MaterialTheme.typography.h4.fontSize
         ),
         modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_medium))

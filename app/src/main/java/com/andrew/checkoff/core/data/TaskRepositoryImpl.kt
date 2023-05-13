@@ -38,6 +38,9 @@ class TaskRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getTasks(): Flow<List<TaskItem>> {
+        // For demo purposes, fetch the first 5 tasks to simulate the app retrieving tasks from an API
+        // Ideally task id on server would be the same as the id on the database so if
+        // the same task is retrieved from the server, taskDao updates the existing task rather than addin a new one.
         for (i in 1..5) {
             apiService.getTaskById(i).asDomainModel().let { task ->
                 taskDao.insert(task.asDatabaseModel())

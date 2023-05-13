@@ -8,4 +8,6 @@
     <string name="task_deleted">Task deleted!</string>
     <string name="undo">undo</string>
     <string name="tasks_require_a_title">Tasks require a title.</string>
+    <string name="congratulations_youre_all_done">Congratulations,\n You're all done!</string>
+    <string name="today">Today</string>
 </resources>

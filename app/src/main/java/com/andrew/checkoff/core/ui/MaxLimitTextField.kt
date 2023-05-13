@@ -32,13 +32,6 @@ internal fun MaxLimitTextField(
             onValueChange = onValueChange,
             maxLines = maxLines,
             placeholder = { Text(text = placeholder) },
-//        supportingText =
-//            Text(
-//                text = "${text.length} / $maxLimit",
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                textAlign = TextAlign.End,
-//            ),
             keyboardOptions = KeyboardOptions(imeAction = imeAction),
             keyboardActions = KeyboardActions(
                 onDone = { focusManager.clearFocus() }),
