@@ -1,4 +1,5 @@
-# Checkoff
+# ![removal ai _tmp-645f086698496](https://github.com/andrewwu-dev/checkoff/assets/46847766/bea64597-28a8-474a-8622-c7c65fc033a5)
+
 An Android todo app built in kotlin that allows users to create, edit, delete, complete and also undo deleted tasks. **Download link is in Setup section.**
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/braEWT9UZEI/0.jpg)](https://www.youtube.com/watch?v=braEWT9UZEI)
